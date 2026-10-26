@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+build/
+dist/
+.coverage
+htmlcov/
+
+# Generated runtime
+outputs/
+tools/ffmpeg-shared/
+tools/ffmpeg-8.0.1-full_build-shared/
+tools/torchcodec-overlay/
+tools/gpu-packages/
+tools/gpu-wheels/
+models/tensorrt/
+*.log
+
+# Large or machine-specific source artifacts
+vendor/ffmpeg/*.zip
+example/*.wav
+example/*.mp3
+example/*.flac
+example/*.m4a
+example/*.aac
+example/*.ogg
+example/*.opus
+example/*.wma
+example/*.mp4
+example/*.mkv
+example/*.webm
+
+# Secrets and editors
+.env
+.env.*
+!.env.example
+*.token
+*.pem
+*.key
+credentials*.json
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
+Desktop.ini

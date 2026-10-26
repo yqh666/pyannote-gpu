@@ -1,0 +1,32 @@
+[
+  {
+    "Name": "tensorrt_cu12_libs-10.13.3.9-py2.py3-none-win_amd64.whl",
+    "Size": 1518425990,
+    "Url": "https://pypi.nvidia.com/tensorrt-cu12-libs/tensorrt_cu12_libs-10.13.3.9-py2.py3-none-win_amd64.whl",
+    "SHA256": "1bb1c4200855e87bc2c878033863d27617c446eddfb411ef08f824020e52ec99"
+  },
+  {
+    "Name": "tensorrt_cu12_bindings-10.13.3.9-cp311-none-win_amd64.whl",
+    "Size": 877325,
+    "Url": "https://pypi.nvidia.com/tensorrt-cu12-bindings/tensorrt_cu12_bindings-10.13.3.9-cp311-none-win_amd64.whl",
+    "SHA256": "f87962f5ea2ae67437a78a5aa08b00345bfb1f19ec815e2566da26e4223c72ad"
+  },
+  {
+    "Name": "onnx-1.19.1-cp311-cp311-win_amd64.whl",
+    "Size": 16464319,
+    "Url": "https://files.pythonhosted.org/packages/8b/b5/6eb4611d24b85002f878ba8476b4cecbe6f9784c0236a3c5eff85236cc0a/onnx-1.19.1-cp311-cp311-win_amd64.whl",
+    "SHA256": "1346853df5c1e3ebedb2e794cf2a51e0f33759affd655524864ccbcddad7035b"
+  },
+  {
+    "Name": "ml_dtypes-0.5.3-cp311-cp311-win_amd64.whl",
+    "Size": 206334,
+    "Url": "https://files.pythonhosted.org/packages/81/1c/d27a930bca31fb07d975a2d7eaf3404f9388114463b9f15032813c98f893/ml_dtypes-0.5.3-cp311-cp311-win_amd64.whl",
+    "SHA256": "58e39349d820b5702bb6f94ea0cb2dc8ec62ee81c0267d9622067d8333596a46"
+  },
+  {
+    "Name": "nvidia_cuda_runtime_cu12-12.9.79-py3-none-win_amd64.whl",
+    "Size": 3591604,
+    "Url": "https://files.pythonhosted.org/packages/59/df/e7c3a360be4f7b93cee39271b792669baeb3846c58a4df6dfcf187a7ffab/nvidia_cuda_runtime_cu12-12.9.79-py3-none-win_amd64.whl",
+    "SHA256": "8e018af8fa02363876860388bd10ccb89eb9ab8fb0aa749aaf58430a9f7c4891"
+  }
+]

@@ -1,0 +1,40 @@
+{
+  "model": "pyannote/speaker-diarization-community-1",
+  "device": "cuda",
+  "backend": "tensorrt",
+  "audio": "example/huawei_test.wav",
+  "duration_seconds": 181.648254,
+  "num_speakers": 3,
+  "speakers": [
+    "SPEAKER_00",
+    "SPEAKER_01",
+    "SPEAKER_02"
+  ],
+  "complete": {
+    "description": "Complete output; overlapping speech is preserved.",
+    "segment_count": 56,
+    "overlap_seconds": 9.500625,
+    "has_overlap": true
+  },
+  "non_conflict": {
+    "description": "Official exclusive output; at most one speaker at any time.",
+    "segment_count": 60,
+    "overlap_seconds": 0,
+    "has_overlap": false
+  },
+  "inference_seconds": 2.580478,
+  "rtf": 0.014206,
+  "output_dir": "example/output",
+  "artifacts": {
+    "complete": {
+      "segments_json": "example/output/complete/segments.json",
+      "txt": "example/output/complete/diarization.txt",
+      "rttm": "example/output/complete/diarization.rttm"
+    },
+    "non_conflict": {
+      "segments_json": "example/output/non_conflict/segments.json",
+      "txt": "example/output/non_conflict/diarization.txt",
+      "rttm": "example/output/non_conflict/diarization.rttm"
+    }
+  }
+}
