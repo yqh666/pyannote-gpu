@@ -49,7 +49,12 @@ GitHub 克隆后，使用者需要：
 1. 自行准备 FFmpeg 归档，要求见 `vendor/ffmpeg/README.md`；
 2. 提供自己的测试音频；
 3. 接受 Community-1 许可并下载模型，或提供许可允许的本地模型目录；
-4. 按 `docs/TENSORRT.md` 下载约 1.540 GB 的固定依赖并在目标 GPU 上构建引擎。
+4. 仅在选择可选 TensorRT 后端时，按 `docs/TENSORRT.md` 下载 1,539,565,572 字节
+   （约 1.540 GB / 1.434 GiB）的固定依赖，并在目标 GPU 上构建引擎。
+
+其中 Python/PyTorch/pyannote 与 Community-1 模型权重属于基础运行准备，不包含在上述
+TensorRT 下载量中。GitHub 当前跟踪文件约 2.34 MB；另行准备的 FFmpeg 归档为
+94,371,734 字节。完整下载范围见根目录 `README.md` 的“下载内容清单”。
 
 完整离线交付包可以额外携带 FFmpeg 归档和 `tools/gpu-wheels/`，但仍不应把当前 GPU 的
 TensorRT engine 当作跨机器通用文件。

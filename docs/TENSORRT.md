@@ -1,7 +1,9 @@
 # TensorRT 可选后端
 
-2026-10-19：用户允许下载约 1.52 GB 的 TensorRT 运行库。本项目固定使用 CUDA 12 系列的
-TensorRT 10.13.3.9，依赖安装在项目的 `tools/gpu-packages/`，不覆盖 Conda 环境。
+TensorRT CUDA 12 主运行库 wheel 为 1,518,425,990 字节，约 1.52 GB。加入 Python 绑定、
+CUDA runtime、ONNX 和 ml_dtypes 后，本项目固定的五个文件总下载量为 1,539,565,572 字节，
+约 1.540 GB / 1.434 GiB。本项目固定使用 TensorRT 10.13.3.9，依赖安装在项目的
+`tools/gpu-packages/`，不覆盖 Conda 环境。
 
 ## 下载与安装
 

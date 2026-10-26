@@ -1,6 +1,6 @@
 # pyannote Community-1 双输出说话人分离
 
-## 交付版本概览（更新 2026-10-19）
+## 交付版本概览（更新 2026-10-26）
 
 本项目已提供单文件、批处理和本地 HTTP 服务，服务启动后只加载一次模型并持续复用。
 交付版本同时包含两条已验收的 GPU 推理路径：
@@ -17,8 +17,10 @@ Python 环境、模型和运行库准备后，可在已激活的环境中启动 
 
 模型就绪后监听 `http://127.0.0.1:8765`。支持上传音频、排队推理、查询状态和下载两套结果。
 完整命令、接口和实际验收结果见 [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)。
-启动脚本默认离线加载模型；FFmpeg、TorchCodec 和 TensorRT 运行库均可放在项目目录中，
-不要求写入接收方的 Python 环境。TensorRT 固定依赖总下载约 1.540 GB，当前样例热运行平均
+启动脚本默认离线加载模型。FFmpeg、仓库附带的 TorchCodec wheel 和 TensorRT 运行库均支持
+从项目目录加载；其中 `pip install -r requirements.txt` 仍会在当前 Python 环境中安装基础依赖，
+可能包含同版本 TorchCodec。可选 TensorRT 的五个固定文件总下载量为 1,539,565,572 字节
+（约 1.540 GB / 1.434 GiB），不包含 Python、PyTorch、pyannote 和模型权重。当前样例热运行平均
 从 6.54 秒降至 1.86 秒，双输出分段一致。安装、构建引擎和换机步骤见
 [TensorRT 安装与使用](docs/TENSORRT.md)。`shared-frames` 是不依赖 TensorRT 的另一种可选加速后端。
 
@@ -92,6 +94,26 @@ pyannote-community1-dual-output/
    └─ 交付报告.md
 ```
 
+## 下载内容清单
+
+GitHub 仓库是可审查源码交付，不是完整离线运行包。克隆后需要按实际环境准备以下内容：
+
+| 内容 | 是否必须 | GitHub 是否包含 | 已知下载量或说明 |
+|---|---|---|---|
+| 源码、文档、测试和小型输出样例 | 必须 | 是 | 当前跟踪文件约 2.34 MB |
+| TorchCodec 0.9.1 CP311 Windows wheel | 必须 | 是 | 2,181,959 字节，已计入仓库大小 |
+| FFmpeg 8.0.1 full shared 归档 | 必须 | 否 | 94,371,734 字节，约 94.4 MB |
+| Python 3.11、PyTorch、torchaudio 和 pyannote 依赖 | 必须；已有兼容环境时无需重装 | 否 | 由安装源和已有缓存决定，未计入 1.540 GB |
+| Community-1 及组件模型权重 | 必须 | 否 | gated 模型，需接受许可；大小未计入 1.540 GB |
+| 输入音频 | 必须由使用者提供 | 否 | 真实验收音频未公开 |
+| TensorRT/ONNX 固定依赖五个 wheel | 可选，仅 `tensorrt` 后端需要 | 否 | 1,539,565,572 字节，约 1.540 GB / 1.434 GiB |
+| 目标 GPU 的 TensorRT 引擎 | 可选后端需要 | 否 | 在接收方机器构建，不作为跨 GPU 文件分发 |
+
+完整 TensorRT 清单中，单独的 TensorRT CUDA 12 主运行库为 1,518,425,990 字节，约 1.518 GB；
+加入 Python 绑定、CUDA runtime、ONNX 和 ml_dtypes 后，五项合计才是 1.540 GB。下载后的 wheel
+缓存、解包依赖和本机引擎会同时占用磁盘，本机三类文件合计约 3.96 GB。不需要完整 CUDA Toolkit，
+但 GPU 运行需要兼容的 NVIDIA 驱动。
+
 ## 快速开始
 
 ### 1. 创建 Python 环境
@@ -126,6 +148,9 @@ pip install torch==2.9.1 torchaudio==2.9.1
 pip install -r requirements.txt
 powershell -ExecutionPolicy Bypass -File .\install_ffmpeg_native.ps1
 ```
+
+`pip install -r requirements.txt` 安装 Python 基础依赖；随后安装脚本会优先准备仓库内固定的
+TorchCodec wheel overlay，并不会覆盖当前环境，除非显式传入 `-InstallIntoEnvironment`。
 
 安装脚本会：
 
@@ -180,7 +205,7 @@ python scripts\build_tensorrt.py
 python scripts\verify_tensorrt_frames.py
 ```
 
-如果交付包不携带 wheel 缓存，可显式下载已固定并校验的约 1.540 GB 依赖：
+如果交付包不携带 wheel 缓存，可显式下载已固定并校验的五个文件，合计约 1.540 GB：
 
 ```powershell
 .\install_tensorrt.ps1 -PythonExe python -Download
@@ -292,7 +317,7 @@ python -m unittest discover -s tests -v
 
 模型权重不在本仓库中。接收方需要自行接受 Community-1 许可并下载，或在许可允许的前提下
 接收单独提供的本地模型目录，再通过 `-Model` 指定。完整交付包和纯源码 Git 仓库的范围不同，
-提交时应在材料清单中注明是否包含 TensorRT wheel、模型和验收输出。
+提交时应在材料清单中注明是否包含 FFmpeg 归档、TensorRT wheel、模型和验收输出。
 
 ## 重要说明
 

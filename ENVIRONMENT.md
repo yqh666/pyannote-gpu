@@ -46,6 +46,10 @@ pip install torch==2.9.1+cu126 torchaudio==2.9.1+cu126 `
 pip install -r requirements.txt
 ```
 
+这里的 `pip install` 会在当前 Python 环境中安装基础依赖，可能包含与仓库 wheel 相同版本的
+TorchCodec。后续运行时仍优先使用项目内准备的固定 overlay；“不覆盖环境”是指
+`install_ffmpeg_native.ps1` 默认不强制重装 TorchCodec，而不是指整个环境创建过程零安装。
+
 ### 仅 CPU
 
 ```powershell
@@ -73,7 +77,7 @@ powershell -ExecutionPolicy Bypass -File .\install_ffmpeg_native.ps1
 1. 从内置压缩包释放 FFmpeg。
 2. 自动定位含 `avcodec-62.dll` 的 shared bin。
 3. 复制到 `tools/ffmpeg-shared/bin`。
-4. 将内置 TorchCodec 0.9.1 wheel 解包到项目内 `tools/torchcodec-overlay`，不修改 Conda 环境。只有显式指定 `-InstallIntoEnvironment` 才会 pip 覆盖安装。
+4. 将内置 TorchCodec 0.9.1 wheel 解包到项目内 `tools/torchcodec-overlay`。该脚本默认不覆盖 Conda 环境；只有显式指定 `-InstallIntoEnvironment` 才会强制 pip 重装。
 5. 把 FFmpeg bin 加入当前进程的 `PATH`。
 6. 本地存在 `example/huawei_test.wav` 时，通过 TorchCodec 的 `AudioDecoder` 做实际解码；GitHub 克隆未提供真实语音时跳过。
 
@@ -124,7 +128,18 @@ python scripts\run_community1.py --audio D:\audio\meeting.wav --output-dir outpu
 首次运行会下载权重。权重已经缓存时可以增加 `--offline`。如果模型已保存为本地目录，
 直接传 `--model D:\models\speaker-diarization-community-1`。
 
-## 6. 音频解码
+## 6. 下载范围与体积
+
+- GitHub 当前跟踪文件约 2.34 MB，其中包含 2,181,959 字节的 TorchCodec wheel。
+- FFmpeg 归档不在 GitHub 中，固定文件大小为 94,371,734 字节。
+- Python、PyTorch、torchaudio、pyannote 及其传递依赖不在仓库中，下载量取决于安装源和缓存。
+- Community-1 模型权重不在仓库中，必须由接收方接受许可后下载或提供合规的本地模型目录。
+- TensorRT 是可选后端；五个固定 wheel 合计 1,539,565,572 字节（约 1.540 GB / 1.434 GiB）。
+- TensorRT wheel 缓存、解包依赖和本机引擎在已验证机器上合计约 3.96 GB 磁盘占用。
+
+以上 TensorRT 数字不包含基础 Python 环境、PyTorch、pyannote、模型权重、FFmpeg 和输入音频。
+
+## 7. 音频解码
 
 TorchCodec 通过 FFmpeg 8.0.1 直接读取音频文件，pyannote 接收文件路径。支持格式由内置
 FFmpeg 构建决定，已验证 WAV 和 MP3。常见输入还包括 FLAC、M4A、AAC、OGG、Opus、
@@ -140,7 +155,7 @@ WMA、MP4、MKV 和 WebM。
 | 位深 | 16-bit PCM |
 | 容器/编码 | WAV / PCM |
 
-## 7. 一次推理，两种输出
+## 8. 一次推理，两种输出
 
 pyannote.audio 4.0.7 的 Community-1 返回对象包含：
 
@@ -152,7 +167,7 @@ output.exclusive_speaker_diarization    # 非冲突版，官方独占时间轴
 本仓库在同一个 `pipeline(...)` 调用后同时读取这两个字段，因此不会为了生成两套结果而重复
 推理。
 
-## 8. 完整复现命令
+## 9. 完整复现命令
 
 ```powershell
 conda activate pyannote-community1
@@ -177,7 +192,7 @@ python -m unittest discover -s tests -v
 - 非冲突版 60 段，重叠 0 秒；
 - 输出包含 `complete`、`non_conflict` 和 `summary.json`。
 
-## 9. 常见问题
+## 10. 常见问题
 
 ### 找不到 `avcodec-62.dll`
 

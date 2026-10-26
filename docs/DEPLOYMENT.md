@@ -1,13 +1,26 @@
 # Windows GPU 端到端部署
 
-更新：2026-10-19。本项目部署的是说话人分离：输入音频，输出带时间戳的文件内说话人编号。
+更新：2026-10-26。本项目部署的是说话人分离：输入音频，输出带时间戳的文件内说话人编号。
 不包含真实人名识别、ASR 文本或视频座位绑定。程序默认值为官方 Community-1 + PyTorch CUDA，
 便于尚未构建本机引擎的接收方启动；交付演示和已验证加速路径使用 `-Backend tensorrt`。
-2026-10-19 已允许使用约 1.52 GB 的 TensorRT 运行库。已核实的固定依赖清单总下载量为
-1,539,565,572 字节（约 1.540 GB，含 ONNX 导出工具），已下载、安装并通过本机 GPU 验收。
+TensorRT 主运行库 wheel 为 1,518,425,990 字节，约 1.52 GB；加入 Python 绑定、CUDA runtime、
+ONNX 和 ml_dtypes 后，已核实的五个固定文件总下载量为 1,539,565,572 字节
+（约 1.540 GB / 1.434 GiB），已下载、安装并通过本机 GPU 验收。
 不需完整 CUDA Toolkit。可用 `-Backend tensorrt` 启用，安装、引擎构建和实测见 [TENSORRT.md](TENSORRT.md)。
 
-## 接收方直接运行
+## 接收方准备清单
+
+GitHub 仓库不是完整离线运行包。运行以下命令前，接收方应完成：
+
+1. 创建 Python 3.11 环境并安装 PyTorch、pyannote 等基础依赖；
+2. 按 `vendor/ffmpeg/README.md` 下载 94,371,734 字节的 FFmpeg 归档并放入指定目录；
+3. 接受 Community-1 模型许可并完成一次联网下载，或准备合规的本地模型目录；
+4. 仅在选择 `tensorrt` 后端时，下载 1,539,565,572 字节的固定依赖并在目标 GPU 构建引擎；
+5. 提供自己的输入音频。GitHub 不包含真实验收音频。
+
+Python/PyTorch/pyannote 和模型权重的下载量不包含在 TensorRT 的 1.540 GB 中。
+
+## 完成准备后运行
 
 先进入交付项目根目录；下列相对路径均以该目录为基准。
 以下命令中的 `python` 指接收方当前已激活 Python 3.11 环境里的解释器，不绑定环境名称或安装路径。
@@ -36,7 +49,8 @@ PowerShell 入口默认 `--offline`，模型从已授权的缓存或 `-Model` �
 
 `-Device cuda` 为默认；GPU 不可用时明确报错。需要 CPU 时显式传 `-Device cpu`。
 尚未安装 TensorRT 或尚未为目标 GPU 构建引擎时，改用 `-Backend torch`。
-自带 FFmpeg 与 TorchCodec 解包到 `tools/`，脚本可重复执行，不修改 Conda 包。
+完整离线包可以自带 FFmpeg；GitHub 克隆版本必须先另行准备 FFmpeg 归档。安装脚本将 FFmpeg 与
+固定 TorchCodec wheel 解包到 `tools/`，脚本可重复执行，默认不强制重装 Conda 环境中的 TorchCodec。
 `install_ffmpeg_native.ps1 -InstallIntoEnvironment` 是显式覆盖安装选项，通常无需使用。
 
 ## 服务调用
