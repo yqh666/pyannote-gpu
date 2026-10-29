@@ -177,3 +177,10 @@ HTTP 首次正常任务的处理与封装耗时 2.507 秒，不含模型加载�
 本轮没有重新下载这些包。离线使用时须准备已授权模型及其 segmentation、embedding、plda 子目录，
 通过 `-Model D:\models\speaker-diarization-community-1` 指定，或准备完整 HF 缓存。
 模型许可和现有音频的再分发约束见 THIRD_PARTY_NOTICES.md。
+
+## 三种运行方式的实测延迟
+
+2026-10-29 已使用 11 条、合计约 19.69 分钟的本地音频，对“每个文件重新启动的未部署
+PyTorch”“常驻 PyTorch 服务”和“常驻 TensorRT 服务”进行独立进程实测。含一次完整服务启动时，
+整批总时长分别为 140.127、48.175 和 20.098 秒；33 次推理的完整与非冲突分段全部一致。
+详细计时口径、逐文件结果和复现脚本见 [LATENCY_COMPARISON.md](LATENCY_COMPARISON.md)。

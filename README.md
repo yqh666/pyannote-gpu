@@ -89,6 +89,7 @@ pyannote-community1-dual-output/
    ├─ DEPLOYMENT.md
    ├─ GITHUB.md
    ├─ TENSORRT.md
+   ├─ LATENCY_COMPARISON.md
    ├─ OUTPUT_FORMAT.md
    ├─ VERIFIED_RUN.md
    └─ 交付报告.md
@@ -263,6 +264,23 @@ TensorRT 引擎与 GPU、TensorRT 版本和模型权重绑定，接收方换机�
 
 示例文件是实际输出，不是手工编写的格式样例。复现记录见
 [docs/VERIFIED_RUN.md](docs/VERIFIED_RUN.md)。
+
+## 三版部署延迟对比
+
+2026-10-29 使用 11 条、合计 1,181.648254 秒的本地音频，分别实测每条重新启动的未部署
+PyTorch、常驻 PyTorch HTTP 服务和常驻 TensorRT HTTP 服务。两个服务均在各自全新的 Python
+进程中启动，没有共享模块缓存；第一条请求未做隐藏预热。
+
+| 模式 | 11 条请求合计 | 含一次服务启动 | 相对未部署加速 |
+|---|---:|---:|---:|
+| 未部署 / PyTorch | 140.127 秒 | 140.127 秒 | 1.00× |
+| 已部署 / PyTorch | 40.352 秒 | 48.175 秒 | 2.91× |
+| 已部署 / TensorRT | 11.763 秒 | 20.098 秒 | 6.97× |
+
+如果服务已经启动，只比较请求阶段，部署 PyTorch 和部署 TensorRT 相对未部署分别快 3.47× 和
+11.91×；TensorRT 相对部署 PyTorch 快 3.43×。三版共 33 次推理的完整/非冲突分段全部一致。
+测试方法、逐文件延迟和限制见 [三种推理方式延迟对比](docs/LATENCY_COMPARISON.md)，精简机器可读结果见
+[`example/deployment_latency_summary.json`](example/deployment_latency_summary.json)。
 
 ## 常用参数
 

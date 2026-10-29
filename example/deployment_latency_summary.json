@@ -1,0 +1,55 @@
+{
+  "test_date": "2026-10-29",
+  "environment": {
+    "python": "3.11.16",
+    "torch": "2.9.1+cu126",
+    "cuda": "12.6",
+    "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+    "tensorrt": "10.13.3.9 FP32"
+  },
+  "dataset": {
+    "files": 11,
+    "audio_seconds": 1181.648254,
+    "audio_minutes": 19.694138,
+    "raw_audio_included": false
+  },
+  "modes": [
+    {
+      "mode": "no_deployment_torch",
+      "service_startup_seconds": null,
+      "inference_total_seconds": 43.904896,
+      "request_end_to_end_total_seconds": 140.126731,
+      "batch_total_including_service_start_seconds": 140.126731,
+      "mean_request_end_to_end_seconds": 12.738794,
+      "rtf_inference": 0.037156,
+      "speedup_vs_no_deployment": 1.0
+    },
+    {
+      "mode": "deployed_torch",
+      "service_startup_seconds": 7.823096,
+      "inference_total_seconds": 39.34228,
+      "request_end_to_end_total_seconds": 40.351983,
+      "batch_total_including_service_start_seconds": 48.175079,
+      "mean_request_end_to_end_seconds": 3.668362,
+      "rtf_inference": 0.033294,
+      "speedup_vs_no_deployment": 2.908697
+    },
+    {
+      "mode": "deployed_tensorrt",
+      "service_startup_seconds": 8.335278,
+      "inference_total_seconds": 10.540824,
+      "request_end_to_end_total_seconds": 11.762536,
+      "batch_total_including_service_start_seconds": 20.097814,
+      "mean_request_end_to_end_seconds": 1.069321,
+      "rtf_inference": 0.00892,
+      "speedup_vs_no_deployment": 6.972237
+    }
+  ],
+  "request_only_speedups": {
+    "deployed_torch_vs_no_deployment": 3.473,
+    "deployed_tensorrt_vs_no_deployment": 11.913,
+    "deployed_tensorrt_vs_deployed_torch": 3.431
+  },
+  "all_segment_outputs_match": true,
+  "full_local_result": "outputs/deployment_latency_benchmark_final_20261029/benchmark.json"
+}
